@@ -57,6 +57,7 @@ USE diStreaming;
 ### CREATE TABLE dengan PK, FK, NOT NULL, dan Constraints
 
 #### Tabel `users`
+```sql
 CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     username VARCHAR(30) NOT NULL UNIQUE, 
@@ -66,8 +67,10 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+```
 
 #### Tabel `MOVIES`
+```sql
 CREATE TABLE movies (
     movie_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     movie_name VARCHAR(255) NOT NULL, 
@@ -87,9 +90,10 @@ CREATE TABLE category (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
+```
 #### Tabel PIVOT (Hubungan Film & Kategori)
 #### Tabel `Movie_category`
+```sql
 CREATE TABLE movie_category (
     movie_id INT NOT NULL,
     category_id INT NOT NULL,
@@ -97,8 +101,9 @@ CREATE TABLE movie_category (
     FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
 );
-
+```
 #### Tabel `WATCHLIST`
+```sql
 CREATE TABLE watchlist (
     watchlist_id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     user_id INT NOT NULL,
@@ -112,7 +117,7 @@ CREATE TABLE watchlist (
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
     CONSTRAINT fk_movie FOREIGN KEY (movie_id) REFERENCES movies(movie_id) ON DELETE CASCADE
 );
-
+```
 ##  Data Insertion (DML)
 
 Setiap tabel telah diisi dengan data lebih dari **10 record**:
@@ -131,26 +136,39 @@ Setiap tabel telah diisi dengan data lebih dari **10 record**:
 ## 1. SQL Fundamentals 
 
 ### 1.1 Tampilkan seluruh film dari tabel Movies
+```sql
 SELECT * FROM movies;
+```
 
 ### 1.2 Tampilkan film dengan rating di atas 8.0
+```sql
 SELECT movie_name, rating FROM movies WHERE rating > 8.0;
+```
 
 ### 1.3 Tampilkan 5 user pertama berdasarkan nama (A–Z)
+```sql
 SELECT * FROM users ORDER BY fullname LIMIT 5;
+```
 
 ### 1.4 Tampilkan film yang judulnya mengandung kata “Love”
+```sql
 SELECT * FROM movies WHERE movie_name LIKE '%The%';
+```
 
 ### 1.5 Tampilkan film yang rilis pada tahun tertentu (2024)
+```sql
 SELECT * FROM movies WHERE release_year = 2024;
+```
 
 ## 2. Aggregate & Conditional Logic 
 
 ### 2.1 Hitung total user yang terdaftar
+```sql
 SELECT COUNT(*) AS total_user FROM users;
+```
 
 ### 2.2 Hitung jumlah film per kategori (COUNT + GROUP BY category_id)
+```sql
 SELECT 
     c.category_id,
     c.category_name,
@@ -163,9 +181,10 @@ GROUP BY
     c.category_id, c.category_name
 ORDER BY 
     total_movies DESC;
-
+```
 
 ### 2.3 Buat kategori film (kolom baru) berdasarkan rating menggunakan CASE WHEN
+```sql
 SELECT movie_name, rating,
 CASE
 	WHEN rating >= 8.5 THEN "Top Rated"
@@ -174,9 +193,11 @@ CASE
 END AS popularity
 FROM movies
 ORDER BY rating DESC;
+```
 
 ## 3. Join Statements 
 ### 3.1 Tampilkan daftar film lengkap (kategori film, rating(score), release year)
+```sql
 SELECT 
     m.movie_id,
     m.movie_name,
@@ -193,9 +214,10 @@ GROUP BY
     m.movie_id, m.movie_name, m.release_year, m.rating
 ORDER BY 
     m.release_year DESC, m.rating DESC;
-
+```
 
 ### 3.2 Tampilkan kategori yang belum memiliki film
+```sql
 SELECT 
     c.category_id,
     c.category_name
@@ -205,6 +227,7 @@ LEFT JOIN
     movie_category mc ON c.category_id = mc.category_id
 WHERE 
     mc.movie_id IS NULL;
+```
 
 ##  Cara Menjalankan
 
